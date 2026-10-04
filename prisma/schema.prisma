@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Contract {
+  id               String   @id @default(cuid())
+  title            String
+  fileUrl          String?
+  textContent      String
+  version          Int      @default(1)
+  previousId       String?
+  parties          String?
+  effectiveDate    DateTime?
+  expiryDate       DateTime?
+  status           String   @default("PENDING_REVIEW") // PENDING_REVIEW, REVIEWED
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  clauses          Clause[]
+  obligations      Obligation[]
+  clarifications   Clarification[]
+}
+
+model Clause {
+  id               String   @id @default(cuid())
+  contractId       String
+  contract         Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  type             String   // e.g., EXPIRY, RENEWAL, TERMINATION, NOTICE
+  content          String
+  sourceSection    String?
+  status           String   @default("EXTRACTED") // EXTRACTED, APPROVED, REJECTED, STALE
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Obligation {
+  id               String   @id @default(cuid())
+  contractId       String
+  contract         Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  description      String
+  deadline         DateTime?
+  reminderDate     DateTime?
+  responsibleParty String?
+  sourceSection    String?
+  status           String   @default("EXTRACTED") // EXTRACTED, APPROVED, REJECTED, STALE
+  isConfirmed      Boolean  @default(true) // Confirmed vs Uncertain
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Clarification {
+  id               String   @id @default(cuid())
+  contractId       String
+  contract         Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  clauseReference  String?
+  question         String
+  status           String   @default("UNRESOLVED") // UNRESOLVED, RESOLVED
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
