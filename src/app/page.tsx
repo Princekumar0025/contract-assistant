@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import UploadContractForm from '@/components/UploadContractForm';
 
+export const dynamic = 'force-dynamic';
+
 export default async function Dashboard() {
   const contracts = await prisma.contract.findMany({
     orderBy: { updatedAt: 'desc' },

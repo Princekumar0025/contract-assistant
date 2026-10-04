@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation';
 import ReviewItem from '@/components/ReviewItem';
 import { format } from 'date-fns';
 
+export const dynamic = 'force-dynamic';
+
 export default async function ContractReviewPage({ params }: { params: { id: string } }) {
   const { id } = await params;
   
