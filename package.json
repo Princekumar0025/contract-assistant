@@ -6,10 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@ai-sdk/google": "^4.0.87",
+    "@prisma/client": "^5.22.0",
     "ai": "^7.0.127",
     "date-fns": "^4.4.0",
     "lucide-react": "^1.52.0",
@@ -20,7 +22,6 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
-    "@prisma/client": "^5.22.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
