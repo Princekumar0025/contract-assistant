@@ -6,7 +6,7 @@ import { prisma } from '@/lib/prisma';
 
 export async function POST(req: Request) {
   try {
-    const { contractText, title, previousContractId } = await req.json();
+    const { contractText, title, previousContractId, policyText } = await req.json();
 
     if (!contractText) {
       return NextResponse.json({ error: 'Contract text is required' }, { status: 400 });
@@ -47,7 +47,7 @@ export async function POST(req: Request) {
         system: `You are an expert contract analyst assistant. Your role is informational only. Do not provide legal advice.
   Extract key information from the provided contract text. For every item, cite the exact source section (e.g., "Section 4.1").
   If a term is ambiguous, extract it but mark it as uncertain (isConfirmed: false) and generate a clarification question.`,
-        prompt: `Analyze the following contract:\n\n${contractText.substring(0, 30000)}`,
+        prompt: `Analyze the following contract:\n\n${contractText.substring(0, 30000)}\n\n${policyText ? `Also cross-reference with this organizational policy:\n\n${policyText.substring(0, 10000)}` : ''}`,
         schema: z.object({
           parties: z.string().describe('The parties involved in the contract.'),
           effectiveDate: z.string().optional().describe('The effective date of the contract (ISO string or YYYY-MM-DD).'),

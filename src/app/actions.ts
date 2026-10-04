@@ -17,17 +17,15 @@ export async function updateItemStatus(
     await prisma.clarification.update({ where: { id }, data: { status } });
   }
 
-  // Check if all items are approved/rejected/resolved to update contract status
   const contract = await prisma.contract.findUnique({
     where: { id: contractId },
     include: { clauses: true, obligations: true, clarifications: true }
   });
   
   if (contract) {
-    const allClausesDone = contract.clauses.every(c => c.status !== 'EXTRACTED');
-    const allObligationsDone = contract.obligations.every(o => o.status !== 'EXTRACTED');
-    const allClarificationsDone = contract.clarifications.every(c => c.status !== 'UNRESOLVED');
-    
+    const allClausesDone = contract.clauses.every((c: any) => c.status !== 'EXTRACTED');
+    const allObligationsDone = contract.obligations.every((o: any) => o.status !== 'EXTRACTED');
+    const allClarificationsDone = contract.clarifications.every((c: any) => c.status !== 'UNRESOLVED');
     if (allClausesDone && allObligationsDone && allClarificationsDone) {
       await prisma.contract.update({
         where: { id: contractId },

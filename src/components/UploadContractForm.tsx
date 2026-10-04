@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 export default function UploadContractForm() {
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
+  const [policy, setPolicy] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
@@ -24,7 +25,7 @@ export default function UploadContractForm() {
       const res = await fetch('/api/extract', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, contractText: text }),
+        body: JSON.stringify({ title, contractText: text, policyText: policy }),
       });
       
       const data = await res.json();
@@ -58,13 +59,25 @@ export default function UploadContractForm() {
       </div>
 
       <div className="form-group">
-        <label className="form-label">Contract Text (Paste PDF/DOCX content)</label>
+        <label className="form-label">Contract Text (Required)</label>
         <textarea 
           className="form-textarea" 
-          rows={10} 
+          rows={8} 
           placeholder="Paste the raw text of the contract here..."
           value={text}
           onChange={(e) => setText(e.target.value)}
+          disabled={loading}
+        />
+      </div>
+
+      <div className="form-group">
+        <label className="form-label">Organizational Policy (Optional)</label>
+        <textarea 
+          className="form-textarea" 
+          rows={4} 
+          placeholder="Paste optional organizational policy document..."
+          value={policy}
+          onChange={(e) => setPolicy(e.target.value)}
           disabled={loading}
         />
       </div>

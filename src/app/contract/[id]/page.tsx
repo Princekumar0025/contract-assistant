@@ -41,6 +41,16 @@ export default async function ContractReviewPage({ params }: { params: { id: str
             <span className="font-semibold">{contract.expiryDate ? format(new Date(contract.expiryDate), 'PPP') : 'Not identified'}</span>
           </div>
         </div>
+        
+        {contract.status === 'REVIEWED' && (
+          <div className="mt-6 p-6 border border-success-color rounded-lg bg-success-color/5">
+            <h3 className="text-lg font-bold text-success-color mb-2">Reviewed Contract Summary</h3>
+            <p className="text-gray-300">
+              This contract has been fully reviewed. All clauses and obligations have been verified by human reviewers, and ambiguities have been resolved. 
+              There are {contract.obligations.filter(o => o.status === 'APPROVED').length} active obligations and {contract.clauses.filter(c => c.status === 'APPROVED').length} verified clauses.
+            </p>
+          </div>
+        )}
       </div>
 
       <div className="grid md:grid-cols-3 gap-8">
@@ -48,7 +58,7 @@ export default async function ContractReviewPage({ params }: { params: { id: str
           <section>
             <h2 className="text-xl font-bold mb-4 border-b border-gray-700 pb-2">Extracted Clauses</h2>
             {contract.clauses.length === 0 ? <p className="text-gray-400">No key clauses found.</p> : null}
-            {contract.clauses.map(clause => (
+            {contract.clauses.map((clause: any) => (
               <ReviewItem
                 key={clause.id}
                 id={clause.id}
@@ -65,7 +75,7 @@ export default async function ContractReviewPage({ params }: { params: { id: str
           <section>
             <h2 className="text-xl font-bold mb-4 border-b border-gray-700 pb-2">Obligations & Deadlines</h2>
             {contract.obligations.length === 0 ? <p className="text-gray-400">No obligations found.</p> : null}
-            {contract.obligations.map(obs => (
+            {contract.obligations.map((obs: any) => (
               <ReviewItem
                 key={obs.id}
                 id={obs.id}
@@ -89,7 +99,7 @@ export default async function ContractReviewPage({ params }: { params: { id: str
                 <p className="text-success-color">No ambiguous terms identified! The AI is confident in all extractions.</p>
               </div>
             ) : null}
-            {contract.clarifications.map(clar => (
+            {contract.clarifications.map((clar: any) => (
               <ReviewItem
                 key={clar.id}
                 id={clar.id}

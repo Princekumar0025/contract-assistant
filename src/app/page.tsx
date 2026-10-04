@@ -21,7 +21,7 @@ export default async function Dashboard() {
               No contracts uploaded yet.
             </div>
           ) : (
-            contracts.map((contract) => (
+            contracts.map((contract: any) => (
               <div key={contract.id} className="card flex justify-between items-center">
                 <div>
                   <h3 className="text-lg font-semibold">{contract.title}</h3>
